@@ -1,0 +1,30 @@
+name: Release
+
+# Publica una versión: sube la versión en package.json y extension/manifest.json, actualiza CHANGELOG.md,
+# y empuja un tag igual (git tag v0.4.0 && git push origin v0.4.0). El zip queda adjunto al release.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - name: Empaquetar (falla si el tag no coincide con la versión)
+        run: npm run package
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: dist/*.zip
+          generate_release_notes: true

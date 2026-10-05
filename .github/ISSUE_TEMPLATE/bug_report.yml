@@ -1,0 +1,57 @@
+name: Bug report / Reporte de fallo
+description: Something failed while testing a site with WebMCP Flow. / Algo falló al probar una web con WebMCP Flow.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Attach the console trace.** In the chat, open the console (`>_`) and click **⤓ Export trace (JSON)**. API keys are already masked, but the trace includes your messages and the tool results: remove anything private.
+        **Adjunta la traza de la consola.** En el chat abre la consola (`>_`) y pulsa **⤓ Exportar traza (JSON)**. Las keys ya van enmascaradas, pero la traza incluye tus mensajes y los resultados de las tools: quita lo privado.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened? / ¿Qué pasó?
+      description: What you expected and what you got. / Qué esperabas y qué obtuviste.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps / Pasos
+      placeholder: |
+        1. Open http://localhost:5173 …
+        2. Ask "…"
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider / Proveedor
+      options: [Gemini, Claude (Anthropic), Groq, OpenRouter, LM Studio, Other OpenAI-compatible / Otro]
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model / Modelo
+      placeholder: gemini-3.8-flash, claude-sonnet-5-5, qwen/qwen3.8-27b…
+  - type: input
+    id: versions
+    attributes:
+      label: Extension and Chrome versions / Versiones de la extensión y de Chrome
+      placeholder: "WebMCP Flow 0.4.0 · Chrome 141 (WebMCP flag on/off)"
+    validations:
+      required: true
+  - type: textarea
+    id: trace
+    attributes:
+      label: Trace / Traza
+      description: Drag the exported .json file here. / Arrastra aquí el archivo .json exportado.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy / Privacidad
+      options:
+        - label: I checked the trace and screenshots contain no keys or private data. / Revisé que la traza y las capturas no tengan keys ni datos privados.
+          required: true

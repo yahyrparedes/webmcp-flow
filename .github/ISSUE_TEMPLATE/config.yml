@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation / Documentación
+    url: https://yahyrparedes.github.io/webmcp-flow/
+    about: Install, provider setup and "Prepare your site" guide. / Instalación, proveedores y guía "Prepara tu web".
