@@ -8,7 +8,7 @@ WebMCP Flow es una extensión de Chrome para equipos que exponen tools [WebMCP](
 
 ![WebMCP Flow pidiendo un latte en la tienda de ejemplo](docs/assets/demo.gif)
 
-> Estado: 0.4.0, prototipo. Licencia MIT.
+> Estado: 0.4.1, prototipo. Licencia MIT.
 
 ---
 
@@ -84,7 +84,7 @@ npm run package     # dist/webmcp-flow-<versión>.zip para Chrome Web Store
 
 Estructura, pruebas, flujo de versiones y workflows: ver la sección [Develop](README.md#develop-contribute) del README en inglés.
 
-**Publicar una versión:** sube la versión en `package.json` y `extension/manifest.json`, agrégala a `CHANGELOG.md` y empuja el tag (`git tag v0.4.1 && git push origin v0.4.1`). El workflow *Release* corre las pruebas y adjunta el zip al release.
+**Publicar una versión:** sube la versión en `package.json` y `extension/manifest.json`, agrégala a `CHANGELOG.md` y empuja el tag (`git tag v0.5.0 && git push origin v0.5.0`). El workflow *Release* corre las pruebas y adjunta el zip al release.
 
 **Reportar un fallo:** usa la plantilla de [reporte de fallo](https://github.com/yahyrparedes/webmcp-flow/issues/new?template=bug_report.yml) y adjunta la traza exportada de la consola.
 

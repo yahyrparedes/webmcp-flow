@@ -9,7 +9,7 @@ WebMCP Flow is a Chrome extension for teams that expose [WebMCP](https://github.
 
 ![WebMCP Flow ordering a latte on the sample shop](docs/assets/demo.gif)
 
-> Status: 0.4.0, prototype. MIT license.
+> Status: 0.4.1, prototype. MIT license.
 
 ---
 
@@ -116,8 +116,8 @@ npm test            # smoke test + purchase flow with 4 simulated providers
 ### Release
 
 1. Bump the version in `package.json` **and** `extension/manifest.json`, and add it to `CHANGELOG.md`.
-2. `git tag v0.4.1 && git push origin v0.4.1`.
-3. The *Release* workflow runs the tests and attaches `webmcp-flow-0.4.1.zip` to the GitHub release, ready for the Chrome Web Store.
+2. `git tag v0.5.0 && git push origin v0.5.0`.
+3. The *Release* workflow runs the tests and attaches `webmcp-flow-0.5.0.zip` to the GitHub release, ready for the Chrome Web Store.
 
 `npm run package` builds the same zip locally in `dist/`.
 

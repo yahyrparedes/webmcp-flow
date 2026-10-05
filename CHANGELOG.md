@@ -2,7 +2,9 @@
 
 All notable changes to WebMCP Flow. Versions follow [Semantic Versioning](https://semver.org/); dates are YYYY-MM-DD.
 
-## [Unreleased]
+## [0.4.1] - 2026-10-05
+### Changed
+- Shorter extension description without the list of model providers (Chrome Web Store keyword policy).
 ### Added
 - Sample shop: **Tools WebMCP** panel that lists every tool (schema, read-only/action/human-confirmed, screen-specific), runs it with a JSON input and logs each call from the agent or the panel. Works even without WebMCP in the browser.
 - The project page registers its own WebMCP tools (install steps, providers, privacy summary, show a section, open the sample shop).
@@ -48,4 +50,5 @@ All notable changes to WebMCP Flow. Versions follow [Semantic Versioning](https:
 ### Added
 - First prototype: floating chat (Shadow DOM), WebMCP tool detection (native or compatibility shim), Gemini and LM Studio, read-only debug console, memory across navigation and reloads.
 
+[0.4.1]: https://github.com/yahyrparedes/webmcp-flow/releases/tag/v0.4.1
 [0.4.0]: https://github.com/yahyrparedes/webmcp-flow/releases/tag/v0.4.0

@@ -1,6 +1,6 @@
 {
  "extDescription": {
-  "message": "Test your site's WebMCP tools with a chat that uses them like an agent (Gemini, Claude, Groq, LM Studio…) plus a debug console."
+  "message": "Test your site's WebMCP tools end to end with a chat that calls them like an AI agent, plus a debug console."
  },
  "fabOpen": {
   "message": "Open WebMCP Flow"
