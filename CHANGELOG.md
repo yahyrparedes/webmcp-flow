@@ -2,6 +2,11 @@
 
 All notable changes to WebMCP Flow. Versions follow [Semantic Versioning](https://semver.org/); dates are YYYY-MM-DD.
 
+## [Unreleased]
+### Added
+- Sample shop: **Tools WebMCP** panel that lists every tool (schema, read-only/action/human-confirmed, screen-specific), runs it with a JSON input and logs each call from the agent or the panel. Works even without WebMCP in the browser.
+- The project page registers its own WebMCP tools (install steps, providers, privacy summary, show a section, open the sample shop).
+
 ## [0.4.0] - 2026-10-05
 ### Added
 - Public repository with CI (GitHub Actions): smoke test plus the full purchase flow with four simulated providers on every push, a store-ready `.zip`, releases on `v*` tags and GitHub Pages deployment.

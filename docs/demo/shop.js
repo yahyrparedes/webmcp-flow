@@ -194,12 +194,65 @@ const CONTEXT_TOOLS = [
     async () => { const c = current(); return c ? addLine(c.product, c.sel, c.quantity) : { error: 'No hay ningún producto abierto.' }; }),
 ];
 
-function register(t, signal) {
-  const wrapped = { ...t, execute: async (input) => { try { return await t.execute(typeof input === 'string' ? JSON.parse(input || '{}') : input ?? {}); } catch (e) { return { error: e.message }; } } };
-  registered.add(t.name);
-  signal?.addEventListener('abort', () => registered.delete(t.name), { once: true });
-  try { mc?.registerTool(wrapped, signal ? { signal } : undefined); } catch (e) { console.warn('[demo] registerTool', t.name, e.message); }
+// Registro propio: el panel "Tools WebMCP" de la página lista y ejecuta las tools aunque el navegador no traiga WebMCP.
+const toolDefs = new Map();
+const callLog = [];
+const EXAMPLES = {
+  search_products: { query: 'latte' }, get_product_details: { slug: 'latte' }, list_menu: { category: 'Café' },
+  add_to_cart: { slug: 'latte', size: 'Grande', options: [{ option: 'avena' }, { option: 'espresso' }] },
+  navigate_to: { page: 'producto', slug: 'cappuccino' }, customize_current_product: { size: 'Venti', options: [{ option: 'caramel' }] },
+  update_cart_item: { lineId: 'L1', quantity: 2 }, remove_from_cart: { lineId: 'L1' },
+};
+async function runTool(t, input, source) {
+  const entry = { at: new Date(), tool: t.name, source, input: input ?? {}, status: 'running' };
+  callLog.unshift(entry);
+  if (callLog.length > 30) callLog.pop();
+  renderTools();
+  const t0 = performance.now();
+  let out;
+  try { out = await t.execute(input ?? {}); } catch (e) { out = { error: e.message }; }
+  Object.assign(entry, { output: out, status: out && typeof out === 'object' && 'error' in out ? 'error' : 'ok', ms: Math.round(performance.now() - t0) });
+  renderTools();
+  return out;
 }
+function register(t, signal) {
+  const wrapped = { ...t, execute: (input) => runTool(t, typeof input === 'string' ? JSON.parse(input || '{}') : input ?? {}, 'agente') };
+  registered.add(t.name);
+  toolDefs.set(t.name, t);
+  signal?.addEventListener('abort', () => { registered.delete(t.name); toolDefs.delete(t.name); renderTools(); }, { once: true });
+  try { mc?.registerTool(wrapped, signal ? { signal } : undefined); } catch (e) { console.warn('[demo] registerTool', t.name, e.message); }
+  renderTools();
+}
+
+function renderTools() {
+  const count = document.querySelector('#toolCount');
+  if (!count) return;
+  count.textContent = toolDefs.size;
+  const panel = document.querySelector('#tools');
+  if (panel.hidden) return;
+  const badge = (t) => t.annotations?.destructiveHint ? '<span class="tag warn">confirma la persona</span>'
+    : t.annotations?.readOnlyHint ? '<span class="tag">solo lectura</span>' : '<span class="tag act">acción</span>';
+  const contextual = new Set(CONTEXT_TOOLS.map((t) => t.name));
+  // La lista se rehace solo si cambian las tools (así no se cierran los paneles abiertos al registrar una llamada).
+  const sig = [...toolDefs.keys()].join(',');
+  if (renderTools.sig !== sig || !document.querySelector('#toolList').childElementCount) {
+    renderTools.sig = sig;
+    const open = new Set([...document.querySelectorAll('#toolList details[open]')].map((d) => d.dataset.tool));
+    document.querySelector('#toolList').innerHTML = [...toolDefs.values()].map((t) => `
+    <details class="tool" data-tool="${esc(t.name)}"${open.has(t.name) ? ' open' : ''}>
+      <summary><code>${esc(t.name)}</code>${badge(t)}${contextual.has(t.name) ? '<span class="tag ctx">de esta pantalla</span>' : ''}</summary>
+      <p>${esc(t.description)}</p>
+      <pre>${esc(JSON.stringify(t.inputSchema, null, 2))}</pre>
+      <label>Input (JSON)<textarea data-input="${esc(t.name)}" rows="3" spellcheck="false">${esc(JSON.stringify(EXAMPLES[t.name] ?? {}))}</textarea></label>
+      <button type="button" data-run="${esc(t.name)}">Ejecutar</button>
+    </details>`).join('');
+  }
+  document.querySelector('#toolLog').innerHTML = callLog.length ? callLog.map((c) => `
+    <li class="${c.status}"><span class="when">${c.at.toLocaleTimeString()}</span> <strong>${esc(c.tool)}</strong> <span class="src">${c.source}</span>${c.ms != null ? ` <span class="when">${c.ms} ms</span>` : ''}
+      <code>${esc(JSON.stringify(c.input))}</code>${c.output !== undefined ? `<code class="out">→ ${esc(JSON.stringify(c.output).slice(0, 220))}</code>` : ''}</li>`).join('')
+    : '<li class="empty">Aún no hay llamadas. Pídele algo al asistente o ejecuta una tool aquí.</li>';
+}
+
 let contextCtrl = null;
 function setContextTools(on) {
   if (on && !contextCtrl) {
@@ -282,6 +335,21 @@ function pay() {
 document.addEventListener('click', (e) => {
   const b = e.target.closest('button');
   if (!b) return;
+  if (b.id === 'toolsBtn' || b.id === 'toolsClose') {
+    const panel = $('#tools');
+    panel.hidden = !panel.hidden;
+    $('#toolsBtn').setAttribute('aria-expanded', String(!panel.hidden));
+    renderTools();
+    return;
+  }
+  if (b.dataset.run) {
+    const t = toolDefs.get(b.dataset.run);
+    const raw = document.querySelector(`[data-input="${CSS.escape(b.dataset.run)}"]`)?.value || '{}';
+    let input;
+    try { input = JSON.parse(raw); } catch { flash('El input no es JSON válido.'); return; }
+    if (t) runTool(t, input, 'panel');
+    return;
+  }
   const c = state.current;
   if (b.dataset.size && c) { c.sel.size = b.dataset.size; render(); }
   else if (b.dataset.opt && c) {
@@ -296,6 +364,9 @@ document.addEventListener('click', (e) => {
 });
 window.addEventListener('hashchange', render);
 
+$('#toolMode').textContent = mc
+  ? (mc.__webmcpFlowShim ? 'Registradas en document.modelContext (capa compatible de WebMCP Flow).' : 'Registradas en document.modelContext (WebMCP nativo de Chrome).')
+  : 'Este navegador no expone WebMCP: las tools solo se ven y se ejecutan en este panel.';
 if (!mc) $('#nowebmcp').hidden = false;
 GLOBAL_TOOLS.forEach((t) => register(t));
 render();

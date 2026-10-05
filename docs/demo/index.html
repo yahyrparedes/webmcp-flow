@@ -38,6 +38,27 @@
     .small { color: var(--muted); font-size: 13px; margin-bottom: 0; }
     .done { text-align: center; padding: 40px 0; }
     #flash { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: var(--accent-ink); padding: 10px 16px; border-radius: 999px; font-weight: 600; }
+    .right { display: flex; gap: 8px; align-items: center; }
+    .pill { border-radius: 999px; padding: 6px 12px; font-size: 14px; font-weight: 600; }
+    .pill[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+    #tools { position: fixed; top: 66px; right: 0; bottom: 0; width: min(420px, 100vw); overflow-y: auto; background: var(--card); border-left: 1px solid var(--line); padding: 14px 16px 40px; box-shadow: -12px 0 30px -20px rgba(0,0,0,.35); z-index: 10; font-size: 14px; }
+    .tools-head { display: flex; justify-content: space-between; align-items: center; }
+    .tools-head button { border: 0; padding: 4px 8px; }
+    .mode { margin: 8px 0 4px; color: var(--accent); font-weight: 600; }
+    details.tool { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; margin-bottom: 6px; }
+    details.tool summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    details.tool p { margin: 8px 0; color: var(--muted); }
+    details.tool pre { font-size: 12px; background: var(--bg); padding: 8px; border-radius: 8px; overflow-x: auto; max-height: 180px; }
+    details.tool label { display: block; font-weight: 600; font-size: 13px; }
+    details.tool textarea { display: block; width: 100%; margin: 4px 0 8px; font: 12px ui-monospace, Menlo, monospace; padding: 6px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+    .tag { font-size: 11px; border-radius: 999px; padding: 2px 8px; background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+    .tag.act { color: var(--accent); border-color: var(--accent); } .tag.warn { color: var(--warn); border-color: var(--warn); } .tag.ctx { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+    #tools h3 { font-size: 14px; margin: 16px 0 6px; }
+    #toolLog { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+    #toolLog li { border-left: 3px solid var(--accent); padding: 4px 8px; background: var(--bg); border-radius: 0 8px 8px 0; }
+    #toolLog li.error { border-left-color: var(--warn); } #toolLog li.empty { border: 0; color: var(--muted); }
+    #toolLog code { display: block; font-size: 12px; word-break: break-all; color: var(--muted); } #toolLog code.out { color: var(--ink); }
+    .when, .src { color: var(--muted); font-size: 12px; } .src { text-transform: uppercase; letter-spacing: .04em; }
     [hidden] { display: none !important; }
     @media (max-width: 560px) { .detail { grid-template-columns: 1fr; } }
   </style>
@@ -45,10 +66,21 @@
 <body>
   <header>
     <a href="#/">☕ Café Juanito</a>
-    <a class="cart" href="#/cart">Carrito · <span id="cartCount">0</span></a>
+    <nav class="right">
+      <button type="button" id="toolsBtn" class="pill" aria-expanded="false" aria-controls="tools">Tools WebMCP · <span id="toolCount">0</span></button>
+      <a class="cart" href="#/cart">Carrito · <span id="cartCount">0</span></a>
+    </nav>
   </header>
+  <aside id="tools" hidden aria-label="Tools WebMCP de esta página">
+    <div class="tools-head"><strong>Tools WebMCP</strong><button type="button" id="toolsClose" aria-label="Cerrar panel">✕</button></div>
+    <p class="mode" id="toolMode"></p>
+    <p class="small">Lo que un agente puede hacer en esta tienda. Las tools "de esta pantalla" aparecen solo al abrir un producto.</p>
+    <div id="toolList"></div>
+    <h3>Llamadas</h3>
+    <ul id="toolLog"></ul>
+  </aside>
   <main>
-    <p class="note" id="nowebmcp" hidden>Esta página registra tools WebMCP. Para verlas, instala <a href="../">WebMCP Flow</a> y actívala en este sitio, o usa Chrome con WebMCP activado.</p>
+    <p class="note" id="nowebmcp" hidden>Este navegador no expone WebMCP, así que ningún agente ve estas tools todavía. Puedes revisarlas en <strong>Tools WebMCP</strong> (arriba a la derecha) o instalar <a href="../">WebMCP Flow</a> y activarla en este sitio para probarlas con un modelo.</p>
     <div id="view"></div>
   </main>
   <div id="flash" hidden></div>

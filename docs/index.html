@@ -111,6 +111,7 @@
         <span data-l="en">Open your site, type what a customer would ask, and watch Gemini, Claude, Groq or a local model complete the task using only your page's tools. Every model request and tool call shows up in a debug console.</span>
         <span data-l="es">Abre tu web, escribe lo que pediría un cliente y mira cómo Gemini, Claude, Groq o un modelo local completan la tarea usando solo las tools de tu página. Cada llamada al modelo y a cada tool aparece en una consola de debug.</span>
       </p>
+      <p class="lead" style="font-size:16px;margin-top:-12px"><span data-l="en">This page registers WebMCP tools too: enable WebMCP Flow here and ask "how do I install it?".</span><span data-l="es">Esta página también registra tools WebMCP: activa WebMCP Flow aquí y pregúntale "¿cómo la instalo?".</span></p>
       <div class="ctas">
         <a class="btn primary" href="#install"><span data-l="en">Install the extension</span><span data-l="es">Instalar la extensión</span></a>
         <a class="btn" href="demo/"><span data-l="en">Try the sample shop</span><span data-l="es">Probar la tienda de ejemplo</span> →</a>
@@ -264,6 +265,38 @@ mc?.registerTool({
       try { saved = localStorage.getItem('wmf-lang'); } catch (e) { /* sin almacenamiento */ }
       set(saved || (/^es\b/i.test(navigator.language || '') ? 'es' : 'en'));
       document.querySelectorAll('[data-set]').forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.set); }); });
+    })();
+  </script>
+  <script>
+    // Esta página también registra tools WebMCP: con WebMCP Flow activo aquí, pregúntale "¿cómo la instalo?".
+    (function () {
+      var mc = document.modelContext || navigator.modelContext;
+      if (!mc || !mc.registerTool) return;
+      var base = 'https://yahyrparedes.github.io/webmcp-flow/';
+      var tools = [
+        { name: 'get_install_steps', description: 'Steps to install the WebMCP Flow Chrome extension (Developer mode, from the GitHub release).',
+          inputSchema: { type: 'object', properties: {} }, annotations: { readOnlyHint: true },
+          execute: async function () { return { steps: ['Download webmcp-flow-x.y.z.zip from https://github.com/yahyrparedes/webmcp-flow/releases and unzip it.', 'Open chrome://extensions and turn on Developer mode.', 'Load unpacked and choose the unzipped folder.', 'Open your site on localhost, or click the extension icon and choose "Enable on this site".'], chromeWebStore: 'coming soon' }; } },
+        { name: 'list_providers', description: 'Model providers WebMCP Flow supports, with the default model and where to get a key.',
+          inputSchema: { type: 'object', properties: {} }, annotations: { readOnlyHint: true },
+          execute: async function () { return { providers: [
+            { name: 'Gemini', model: 'gemini-3.8-flash', key: 'https://aistudio.google.com/apikey' },
+            { name: 'Claude', model: 'claude-sonnet-5-5', key: 'https://console.anthropic.com/settings/keys' },
+            { name: 'Groq', model: 'openai/gpt-oss-120b', key: 'https://console.groq.com/keys' },
+            { name: 'OpenRouter', model: 'openai/gpt-oss-120b', key: 'https://openrouter.ai/settings/keys' },
+            { name: 'LM Studio', model: 'the loaded model', key: 'none (local)' },
+            { name: 'Other OpenAI-compatible server', model: 'required', key: 'optional' } ] }; } },
+        { name: 'get_privacy_summary', description: 'Where keys are stored and what is sent to the model provider.',
+          inputSchema: { type: 'object', properties: {} }, annotations: { readOnlyHint: true },
+          execute: async function () { return { keys: 'Stored only in the browser (chrome.storage.local), sent only to the chosen provider.', server: 'There is no WebMCP Flow server: no analytics or tracking.', sentToProvider: 'Messages, the page title and URL, tool names and results.', policy: base + 'privacy.html' }; } },
+        { name: 'show_section', description: 'Scrolls this page to a section so the visitor sees it.',
+          inputSchema: { type: 'object', properties: { section: { type: 'string', enum: ['install', 'prepare', 'privacy', 'faq'] } }, required: ['section'] },
+          execute: async function (input) { var el = document.getElementById(input && input.section); if (!el) return { error: 'Unknown section. Use install, prepare, privacy or faq.' }; el.scrollIntoView({ behavior: 'smooth' }); return { ok: true, section: input.section }; } },
+        { name: 'open_sample_shop', description: 'Opens the sample shop (Café Juanito), a page with shopping tools to try a full agent flow.',
+          inputSchema: { type: 'object', properties: {} },
+          execute: async function () { setTimeout(function () { location.href = 'demo/'; }, 300); return { ok: true, url: base + 'demo/', note: 'The page is navigating to the sample shop.' }; } },
+      ];
+      tools.forEach(function (t) { try { mc.registerTool(t); } catch (e) { console.warn('[webmcp-flow] registerTool', t.name, e.message); } });
     })();
   </script>
 </body>
