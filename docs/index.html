@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebMCP Flow</title>
+  <meta name="description" content="Chrome extension to test your site's WebMCP tools end to end with a chat that uses them like an AI agent. Gemini, Claude, Groq, OpenRouter, LM Studio.">
+  <meta property="og:title" content="WebMCP Flow">
+  <meta property="og:description" content="Test your site's WebMCP tools end to end, with a chat that uses them the way an agent would.">
+  <meta property="og:image" content="https://yahyrparedes.github.io/webmcp-flow/assets/demo.gif">
+  <link rel="icon" href="assets/icon.png">
+  <style>
+    /* Layout: a narrow reading column with a wide "trace" band for the demo; everything else stays quiet. */
+    :root {
+      --paper: #f6f5f1; --card: #ffffff; --ink: #191823; --muted: #615f6f; --line: #e2e0d8;
+      --accent: #5b3df5; --accent-soft: #ece8ff; --accent-ink: #ffffff;
+      --term: #14131c; --term-ink: #d7d4e6; --term-dim: #8a86a0; --ok: #3fb27f; --tool: #f2a93b; --llm: #8f7bff;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #121119; --card: #1a1924; --ink: #ecebf3; --muted: #a29fb4; --line: #2c2a3a; --accent: #8f7bff; --accent-soft: #241f45; --accent-ink: #0f0c22; --term: #0b0a12; color-scheme: dark; }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--sans); }
+    a { color: var(--accent); }
+    .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
+    .col { max-width: 720px; }
+    [data-lang="en"] [data-l="es"], [data-lang="es"] [data-l="en"] { display: none !important; }
+
+    nav { display: flex; align-items: center; gap: 18px; padding-block: 16px; }
+    nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: inherit; text-decoration: none; margin-right: auto; }
+    nav a.link { color: var(--muted); text-decoration: none; font-size: 15px; }
+    nav a.link:hover { color: var(--ink); }
+    .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+    .lang button { font: 600 13px var(--sans); padding: 5px 10px; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+    .lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+    header.hero { padding-block: 48px 28px; }
+    .eyebrow { font: 600 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 18px; }
+    h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.02em; margin: 0 0 18px; text-wrap: balance; max-width: 16ch; }
+    .lead { font-size: 20px; color: var(--muted); margin: 0 0 28px; max-width: 58ch; }
+    .ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); color: var(--ink); background: var(--card); }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+    .btn:focus-visible, .lang button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+    .stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; margin-block: 8px 64px; }
+    .shot { margin: 0; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--card); box-shadow: 0 24px 60px -30px rgba(40, 20, 120, .45); }
+    .shot img { display: block; width: 100%; height: auto; }
+    .shot figcaption { font-size: 13px; color: var(--muted); padding: 10px 14px; border-top: 1px solid var(--line); }
+    .trace { background: var(--term); color: var(--term-ink); border-radius: 16px; padding: 14px 16px; font: 12.5px/1.75 var(--mono); overflow-x: auto; min-width: 0; }
+    .trace .t { color: var(--term-dim); }
+    .trace .k { display: inline-block; width: 40px; font-weight: 700; }
+    .trace .llm { color: var(--llm); } .trace .tool { color: var(--tool); } .trace .ok { color: var(--ok); }
+    .trace .head { color: var(--term-dim); border-bottom: 1px solid #2a2838; padding-bottom: 8px; margin-bottom: 8px; }
+    .trace .line { white-space: nowrap; }
+
+    section { padding-block: 40px; border-top: 1px solid var(--line); }
+    h2 { font-size: 28px; letter-spacing: -0.01em; margin: 0 0 8px; text-wrap: balance; }
+    h3 { font-size: 18px; margin: 0 0 6px; }
+    .sub { color: var(--muted); margin: 0 0 24px; max-width: 62ch; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .item { padding-top: 14px; border-top: 2px solid var(--ink); }
+    .item p { margin: 0; color: var(--muted); font-size: 16px; }
+    ol.steps { padding-left: 22px; margin: 0; } ol.steps li { margin-bottom: 10px; padding-left: 4px; }
+    code { font: 0.88em var(--mono); background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; }
+    pre { background: var(--term); color: var(--term-ink); padding: 16px 18px; border-radius: 14px; overflow-x: auto; font: 13.5px/1.6 var(--mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    .table { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+    table { border-collapse: collapse; width: 100%; font-size: 15px; }
+    th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: 0; }
+    th { font: 600 12px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    td code { white-space: nowrap; }
+    .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+    ul.tips { padding-left: 20px; margin: 0; } ul.tips li { margin-bottom: 8px; }
+    details { border-bottom: 1px solid var(--line); padding-block: 14px; }
+    summary { cursor: pointer; font-weight: 600; }
+    details p { color: var(--muted); margin: 10px 0 0; }
+    .callout { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 14px 18px; }
+    footer { padding-block: 32px 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+    footer a { color: var(--muted); }
+
+    @media (max-width: 860px) { .stage, .two { grid-template-columns: 1fr; } .grid3 { grid-template-columns: 1fr; } nav a.link { display: none; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#"><img src="assets/icon.png" alt="" width="28" height="28"> WebMCP Flow</a>
+      <a class="link" href="#install"><span data-l="en">Install</span><span data-l="es">Instalar</span></a>
+      <a class="link" href="#prepare"><span data-l="en">Prepare your site</span><span data-l="es">Prepara tu web</span></a>
+      <a class="link" href="#faq">FAQ</a>
+      <a class="link" href="https://github.com/yahyrparedes/webmcp-flow">GitHub</a>
+      <span class="lang" role="group" aria-label="Language">
+        <button type="button" data-set="en" aria-pressed="true">EN</button><button type="button" data-set="es" aria-pressed="false">ES</button>
+      </span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Chrome extension · WebMCP</p>
+      <h1>
+        <span data-l="en">See your WebMCP tools work, the way an agent will use them.</span>
+        <span data-l="es">Mira tus tools WebMCP funcionar, como las usará un agente.</span>
+      </h1>
+      <p class="lead">
+        <span data-l="en">Open your site, type what a customer would ask, and watch Gemini, Claude, Groq or a local model complete the task using only your page's tools. Every model request and tool call shows up in a debug console.</span>
+        <span data-l="es">Abre tu web, escribe lo que pediría un cliente y mira cómo Gemini, Claude, Groq o un modelo local completan la tarea usando solo las tools de tu página. Cada llamada al modelo y a cada tool aparece en una consola de debug.</span>
+      </p>
+      <div class="ctas">
+        <a class="btn primary" href="#install"><span data-l="en">Install the extension</span><span data-l="es">Instalar la extensión</span></a>
+        <a class="btn" href="demo/"><span data-l="en">Try the sample shop</span><span data-l="es">Probar la tienda de ejemplo</span> →</a>
+        <a class="btn" href="https://github.com/yahyrparedes/webmcp-flow">GitHub</a>
+      </div>
+    </header>
+
+    <div class="stage">
+      <figure class="shot">
+        <img src="assets/demo.gif" width="960" height="540" alt="WebMCP Flow chat ordering a large oat latte with vanilla on the sample shop, waiting for the person to confirm the payment, and confirming the order.">
+        <figcaption>
+          <span data-l="en">Ordering a latte on the sample shop. The payment waits for the person to press "Confirmar y pagar".</span>
+          <span data-l="es">Pidiendo un latte en la tienda de ejemplo. El pago espera a que la persona pulse "Confirmar y pagar".</span>
+        </figcaption>
+      </figure>
+      <div class="trace" role="img" aria-label="Example of the debug console: model requests and tool calls with timings.">
+        <div class="head">&gt;_ <span data-l="en">Console · read only</span><span data-l="es">Consola · solo lectura</span></div>
+        <div class="line"><span class="t">12:04:01</span> <span class="k llm">LLM</span> POST /v1/chat/completions <span class="ok">200</span></div>
+        <div class="line"><span class="t">12:04:01</span> <span class="k tool">TOOL</span> search_products {"query":"latte"} <span class="ok">ok</span></div>
+        <div class="line"><span class="t">12:04:03</span> <span class="k llm">LLM</span> → navigate_to <span class="t">1.8s</span></div>
+        <div class="line"><span class="t">12:04:03</span> <span class="k tool">TOOL</span> navigate_to {"page":"producto"} <span class="ok">ok</span></div>
+        <div class="line"><span class="t">12:04:05</span> <span class="k tool">TOOL</span> customize_current_product <span class="ok">ok</span></div>
+        <div class="line"><span class="t">12:04:06</span> <span class="k tool">TOOL</span> add_current_product_to_cart <span class="ok">ok</span></div>
+        <div class="line"><span class="t">12:04:08</span> <span class="k tool">TOOL</span> checkout <span class="t">waiting for the person…</span></div>
+        <div class="line"><span class="t">12:04:19</span> <span class="k tool">TOOL</span> checkout <span class="ok">ok</span> <span class="t">11.2s</span></div>
+        <div class="line"><span class="t">12:04:21</span> <span class="k llm">LLM</span> → text <span class="t">1 342→38 tok</span></div>
+      </div>
+    </div>
+
+    <section>
+      <h2><span data-l="en">Built for teams that expose WebMCP tools</span><span data-l="es">Para equipos que exponen tools WebMCP</span></h2>
+      <p class="sub"><span data-l="en">WebMCP lets a page publish tools that AI agents call directly, instead of clicking through screenshots. WebMCP Flow is the quickest way to check those tools as a whole flow, before a real agent does.</span><span data-l="es">WebMCP permite que una página publique tools que los agentes de IA llaman directamente, en lugar de navegar con capturas y clics. WebMCP Flow es la forma más rápida de revisar esas tools como un flujo completo, antes de que lo haga un agente real.</span></p>
+      <div class="grid3">
+        <div class="item"><h3><span data-l="en">Test full flows</span><span data-l="es">Prueba flujos completos</span></h3><p><span data-l="en">Search, product page, cart, checkout. The conversation survives navigation, and screen-specific tools refresh at every step.</span><span data-l="es">Búsqueda, ficha, carrito, pago. La conversación sobrevive a la navegación y las tools de cada pantalla se refrescan en cada paso.</span></p></div>
+        <div class="item"><h3><span data-l="en">Debug every call</span><span data-l="es">Depura cada llamada</span></h3><p><span data-l="en">Requests, responses, tokens and timings for the model and each tool. Export the trace as JSON for a bug report.</span><span data-l="es">Request, response, tokens y tiempos del modelo y de cada tool. Exporta la traza en JSON para reportar un fallo.</span></p></div>
+        <div class="item"><h3><span data-l="en">Demo it live</span><span data-l="es">Hazle una demo en vivo</span></h3><p><span data-l="en">Show clients or stakeholders an agent using your site, with any model you have a key for, or a local one.</span><span data-l="es">Muestra a clientes o al equipo un agente usando tu web, con el modelo del que tengas key o uno local.</span></p></div>
+      </div>
+    </section>
+
+    <section id="install">
+      <div class="two">
+        <div>
+          <h2><span data-l="en">Install</span><span data-l="es">Instalar</span></h2>
+          <p class="sub"><span data-l="en">Chrome Web Store listing coming soon. Until then, load it in Developer mode:</span><span data-l="es">La ficha en Chrome Web Store llega pronto. Mientras tanto, cárgala en modo desarrollador:</span></p>
+          <ol class="steps">
+            <li><span data-l="en">Download the latest</span><span data-l="es">Descarga el último</span> <code>webmcp-flow-x.y.z.zip</code> <span data-l="en">from</span><span data-l="es">desde</span> <a href="https://github.com/yahyrparedes/webmcp-flow/releases">Releases</a> <span data-l="en">and unzip it.</span><span data-l="es">y descomprímelo.</span></li>
+            <li><span data-l="en">Open</span><span data-l="es">Abre</span> <code>chrome://extensions</code> <span data-l="en">and turn on <strong>Developer mode</strong>.</span><span data-l="es">y activa <strong>Modo de desarrollador</strong>.</span></li>
+            <li><span data-l="en"><strong>Load unpacked</strong> → choose the unzipped folder.</span><span data-l="es"><strong>Cargar descomprimida</strong> → elige la carpeta descomprimida.</span></li>
+            <li><span data-l="en">Open your site on <code>localhost</code>, or any other site and click the extension icon → <em>Enable on this site</em>.</span><span data-l="es">Abre tu web en <code>localhost</code>, u otro sitio y pulsa el ícono → <em>Activar en este sitio</em>.</span></li>
+          </ol>
+        </div>
+        <div>
+          <h2><span data-l="en">Pick a model</span><span data-l="es">Elige el modelo</span></h2>
+          <p class="sub"><span data-l="en">Each provider keeps its own key, model and URL. Use a model with tool calling.</span><span data-l="es">Cada proveedor guarda su key, modelo y URL. Usa un modelo con <em>tool calling</em>.</span></p>
+          <div class="table">
+            <table>
+              <thead><tr><th><span data-l="en">Provider</span><span data-l="es">Proveedor</span></th><th><span data-l="en">Default model</span><span data-l="es">Modelo por defecto</span></th></tr></thead>
+              <tbody>
+                <tr><td><a href="https://aistudio.google.com/apikey">Gemini</a></td><td><code>gemini-3.8-flash</code></td></tr>
+                <tr><td><a href="https://console.anthropic.com/settings/keys">Claude</a></td><td><code>claude-sonnet-5-5</code></td></tr>
+                <tr><td><a href="https://console.groq.com/keys">Groq</a></td><td><code>openai/gpt-oss-120b</code></td></tr>
+                <tr><td><a href="https://openrouter.ai/settings/keys">OpenRouter</a></td><td><code>openai/gpt-oss-120b</code></td></tr>
+                <tr><td>LM Studio</td><td><span data-l="en">the loaded model, no key</span><span data-l="es">el modelo cargado, sin key</span></td></tr>
+                <tr><td><span data-l="en">Other</span><span data-l="es">Otro</span></td><td><span data-l="en">any OpenAI-compatible server</span><span data-l="es">cualquier servidor compatible con OpenAI</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="prepare">
+      <h2><span data-l="en">Prepare your site</span><span data-l="es">Prepara tu web</span></h2>
+      <p class="sub"><span data-l="en">WebMCP Flow sees every tool your page registers with <code>document.modelContext</code> (or <code>navigator.modelContext</code>). Without Chrome's WebMCP flag it installs a compatible shim, so this works in any recent Chrome.</span><span data-l="es">WebMCP Flow ve cada tool que tu página registra con <code>document.modelContext</code> (o <code>navigator.modelContext</code>). Sin el flag de WebMCP de Chrome instala un <em>shim</em> compatible, así que funciona en cualquier Chrome reciente.</span></p>
+      <div class="two">
+        <pre><code>const mc = document.modelContext || navigator.modelContext;
+
+mc?.registerTool({
+  name: 'search_products',
+  description: 'Search products by name.',
+  inputSchema: {
+    type: 'object',
+    properties: { query: { type: 'string' } },
+    required: ['query'],
+  },
+  async execute({ query }) {
+    return { results: await api.search(query) };
+  },
+});</code></pre>
+        <ul class="tips">
+          <li><span data-l="en"><strong>Return readable errors as data</strong> (<code>{ error: "Your cart is empty." }</code>) instead of throwing: the model reads them and corrects itself.</span><span data-l="es"><strong>Devuelve errores legibles como datos</strong> (<code>{ error: "El carrito está vacío." }</code>) en lugar de lanzar excepciones: el modelo los lee y se corrige.</span></li>
+          <li><span data-l="en"><strong>Register screen-specific tools</strong> while that screen is open, with an <code>AbortSignal</code> you abort on leave.</span><span data-l="es"><strong>Registra las tools de cada pantalla</strong> mientras está abierta, con un <code>AbortSignal</code> que abortas al salir.</span></li>
+          <li><span data-l="en"><strong>Keep payments human</strong>: the tool prepares the payment and waits for the person to press the button on your page. WebMCP Flow waits too.</span><span data-l="es"><strong>Deja los pagos en manos de la persona</strong>: la tool prepara el pago y espera a que pulse el botón en tu página. WebMCP Flow también espera.</span></li>
+          <li><span data-l="en">See it all in the <a href="demo/">sample shop</a> (<a href="https://github.com/yahyrparedes/webmcp-flow/blob/main/docs/demo/shop.js">source</a>).</span><span data-l="es">Mira todo junto en la <a href="demo/">tienda de ejemplo</a> (<a href="https://github.com/yahyrparedes/webmcp-flow/blob/main/docs/demo/shop.js">código</a>).</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="privacy">
+      <div class="col">
+        <h2><span data-l="en">Your keys stay in your browser</span><span data-l="es">Tus keys se quedan en tu navegador</span></h2>
+        <p class="callout"><span data-l="en">Keys are stored only in Chrome (<code>chrome.storage.local</code>), edited on the extension's own settings page, never inside the site you test, and sent only to the provider you chose. There is no WebMCP Flow server. Messages and tool results go to that provider under its data terms, so use test data.</span><span data-l="es">Las keys se guardan solo en Chrome (<code>chrome.storage.local</code>), se editan en la página de ajustes de la extensión, nunca dentro de la web que pruebas, y se envían solo al proveedor que elegiste. No existe un servidor de WebMCP Flow. Los mensajes y resultados de tools van a ese proveedor bajo sus condiciones: usa datos de prueba.</span></p>
+        <p><a href="privacy.html"><span data-l="en">Read the privacy policy</span><span data-l="es">Leer la política de privacidad</span> →</a></p>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="col">
+        <h2>FAQ</h2>
+        <details>
+          <summary><span data-l="en">Why does Chrome ask to "read and change your data" on a site?</span><span data-l="es">¿Por qué Chrome pide "leer y cambiar tus datos" en un sitio?</span></summary>
+          <p><span data-l="en">That is Chrome's fixed wording for any site access. WebMCP Flow asks only for the site you enable (or for your self-hosted model server) and uses it to show the chat and run that page's own tools. It runs on <code>localhost</code> without asking.</span><span data-l="es">Es el texto fijo de Chrome para cualquier acceso a un sitio. WebMCP Flow lo pide solo para el sitio que activas (o para tu servidor de modelos propio) y lo usa para mostrar el chat y ejecutar las tools de esa misma página. En <code>localhost</code> funciona sin pedir nada.</span></p>
+        </details>
+        <details>
+          <summary><span data-l="en">The chat says it found no WebMCP tools.</span><span data-l="es">El chat dice que no encontró tools WebMCP.</span></summary>
+          <p><span data-l="en">The page did not call <code>registerTool()</code>, or registers tools only on another screen. If you installed or updated the extension with the page open, reload it. If your page waits for native WebMCP, enable <code>chrome://flags/#enable-webmcp-testing</code>.</span><span data-l="es">La página no llamó a <code>registerTool()</code>, o registra sus tools en otra pantalla. Si instalaste o actualizaste la extensión con la página abierta, recárgala. Si tu página espera WebMCP nativo, activa <code>chrome://flags/#enable-webmcp-testing</code>.</span></p>
+        </details>
+        <details>
+          <summary><span data-l="en">Can it pay or confirm things on its own?</span><span data-l="es">¿Puede pagar o confirmar cosas por su cuenta?</span></summary>
+          <p><span data-l="en">Only if your tools allow it. WebMCP Flow can only call the tools your page registers. Design sensitive tools to wait for the person; the chat steps aside while they decide.</span><span data-l="es">Solo si tus tools lo permiten. WebMCP Flow solo puede llamar a las tools que registra tu página. Diseña las tools sensibles para que esperen a la persona; el chat se aparta mientras decide.</span></p>
+        </details>
+        <details>
+          <summary><span data-l="en">Can I use a local model?</span><span data-l="es">¿Puedo usar un modelo local?</span></summary>
+          <p><span data-l="en">Yes: LM Studio, Ollama or any OpenAI-compatible server. Choose LM Studio or "Other" in settings. If the server runs on the same computer, use <code>localhost</code> so Chrome asks for no permission.</span><span data-l="es">Sí: LM Studio, Ollama o cualquier servidor compatible con OpenAI. Elige LM Studio u "Otro" en ajustes. Si el servidor corre en la misma computadora, usa <code>localhost</code> y Chrome no pedirá permisos.</span></p>
+        </details>
+        <details>
+          <summary><span data-l="en">Something failed. How do I report it?</span><span data-l="es">Algo falló. ¿Cómo lo reporto?</span></summary>
+          <p><span data-l="en">Open the console (<code>&gt;_</code>), click <strong>⤓ Export trace</strong>, and attach the file to a <a href="https://github.com/yahyrparedes/webmcp-flow/issues/new?template=bug_report.yml">bug report</a>. Keys are already masked; remove anything private.</span><span data-l="es">Abre la consola (<code>&gt;_</code>), pulsa <strong>⤓ Exportar traza</strong> y adjunta el archivo a un <a href="https://github.com/yahyrparedes/webmcp-flow/issues/new?template=bug_report.yml">reporte de fallo</a>. Las keys ya van enmascaradas; quita lo privado.</span></p>
+        </details>
+      </div>
+    </section>
+
+    <footer>
+      <span>WebMCP Flow · MIT · © 2026 Yahyr Paredes</span>
+      <a href="https://github.com/yahyrparedes/webmcp-flow">GitHub</a>
+      <a href="https://github.com/yahyrparedes/webmcp-flow/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="privacy.html"><span data-l="en">Privacy</span><span data-l="es">Privacidad</span></a>
+      <a href="demo/"><span data-l="en">Sample shop</span><span data-l="es">Tienda de ejemplo</span></a>
+    </footer>
+  </div>
+  <script>
+    // Idioma: el que eligió la persona, si no el del navegador (es-* → español).
+    (function () {
+      var root = document.documentElement;
+      function set(l) {
+        root.dataset.lang = l; root.lang = l;
+        document.querySelectorAll('[data-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.set === l)); });
+        try { localStorage.setItem('wmf-lang', l); } catch (e) { /* sin almacenamiento */ }
+      }
+      var saved = null;
+      try { saved = localStorage.getItem('wmf-lang'); } catch (e) { /* sin almacenamiento */ }
+      set(saved || (/^es\b/i.test(navigator.language || '') ? 'es' : 'en'));
+      document.querySelectorAll('[data-set]').forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.set); }); });
+    })();
+  </script>
+</body>
+</html>

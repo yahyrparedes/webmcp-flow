@@ -1,0 +1,22 @@
+{
+  "name": "webmcp-flow",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Chrome extension to test a site's WebMCP tools end to end with a chat that uses them like an agent.",
+  "license": "MIT",
+  "type": "module",
+  "repository": { "type": "git", "url": "https://github.com/yahyrparedes/webmcp-flow.git" },
+  "homepage": "https://yahyrparedes.github.io/webmcp-flow/",
+  "scripts": {
+    "test": "node test/run.mjs && npm run test:demo",
+    "test:smoke": "node test/run.mjs",
+    "test:demo": "node test/demo.mjs lmstudio && node test/demo.mjs gemini && node test/demo.mjs groq && node test/demo.mjs anthropic",
+    "package": "node scripts/package.mjs",
+    "version:check": "node scripts/package.mjs --check",
+    "serve:docs": "node scripts/serve.mjs docs 8080"
+  },
+  "devDependencies": {
+    "playwright": "1.56.0"
+  },
+  "engines": { "node": ">=20" }
+}

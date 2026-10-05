@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebMCP Flow · Privacy</title>
+  <meta name="description" content="Privacy policy of the WebMCP Flow Chrome extension.">
+  <link rel="icon" href="assets/icon.png">
+  <style>
+    :root { --paper: #f6f5f1; --card: #fff; --ink: #191823; --muted: #615f6f; --line: #e2e0d8; --accent: #5b3df5; --accent-soft: #ece8ff;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; color-scheme: light; }
+    @media (prefers-color-scheme: dark) { :root { --paper: #121119; --card: #1a1924; --ink: #ecebf3; --muted: #a29fb4; --line: #2c2a3a; --accent: #8f7bff; --accent-soft: #241f45; color-scheme: dark; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.65 var(--sans); }
+    main { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 24px 64px; }
+    a { color: var(--accent); }
+    nav { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+    nav a.brand { display: flex; gap: 10px; align-items: center; font-weight: 700; color: inherit; text-decoration: none; margin-right: auto; }
+    .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+    .lang button { font: 600 13px var(--sans); padding: 5px 10px; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+    .lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    [data-lang="en"] [data-l="es"], [data-lang="es"] [data-l="en"] { display: none !important; }
+    h1 { font-size: 36px; line-height: 1.1; margin: 0 0 6px; text-wrap: balance; }
+    h2 { font-size: 21px; margin: 32px 0 8px; }
+    .meta { color: var(--muted); margin: 0 0 24px; }
+    code { font: .88em var(--mono); background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; }
+    .table { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+    table { border-collapse: collapse; width: 100%; font-size: 15px; }
+    th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: 0; }
+    th { font: 600 12px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .lang button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+<main>
+  <nav>
+    <a class="brand" href="./"><img src="assets/icon.png" alt="" width="28" height="28"> WebMCP Flow</a>
+    <span class="lang" role="group" aria-label="Language"><button type="button" data-set="en" aria-pressed="true">EN</button><button type="button" data-set="es" aria-pressed="false">ES</button></span>
+  </nav>
+
+  <h1><span data-l="en">Privacy policy</span><span data-l="es">Política de privacidad</span></h1>
+  <p class="meta"><span data-l="en">Effective October 5, 2026 · applies to the WebMCP Flow Chrome extension.</span><span data-l="es">Vigente desde el 5 de octubre de 2026 · aplica a la extensión de Chrome WebMCP Flow.</span></p>
+
+  <p><span data-l="en"><strong>WebMCP Flow has no server and collects nothing.</strong> The extension runs in your browser and talks only to the AI provider you configure. Nobody who builds WebMCP Flow can see your keys, your conversations or the sites you test.</span><span data-l="es"><strong>WebMCP Flow no tiene servidor y no recolecta nada.</strong> La extensión corre en tu navegador y solo habla con el proveedor de IA que configuras. Nadie que desarrolle WebMCP Flow puede ver tus keys, tus conversaciones ni los sitios que pruebas.</span></p>
+
+  <h2><span data-l="en">What is stored, and where</span><span data-l="es">Qué se guarda y dónde</span></h2>
+  <div class="table">
+    <table>
+      <thead><tr><th><span data-l="en">Data</span><span data-l="es">Dato</span></th><th><span data-l="en">Where</span><span data-l="es">Dónde</span></th><th><span data-l="en">How long</span><span data-l="es">Cuánto tiempo</span></th></tr></thead>
+      <tbody>
+        <tr><td><span data-l="en">API keys, models and server URLs (one per provider)</span><span data-l="es">API keys, modelos y URLs de servidor (uno por proveedor)</span></td><td><code>chrome.storage.local</code></td><td><span data-l="en">Until you delete them or remove the extension</span><span data-l="es">Hasta que las borres o quites la extensión</span></td></tr>
+        <tr><td><span data-l="en">Assistant name, style, chat position, active sites</span><span data-l="es">Nombre y estilo del asistente, posición del chat, sitios activos</span></td><td><code>chrome.storage.local</code></td><td><span data-l="en">Same</span><span data-l="es">Igual</span></td></tr>
+        <tr><td><span data-l="en">Conversation and console trace of each tab</span><span data-l="es">Conversación y traza de la consola de cada pestaña</span></td><td><code>chrome.storage.session</code></td><td><span data-l="en">Deleted when you close the tab or the browser</span><span data-l="es">Se borra al cerrar la pestaña o el navegador</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><span data-l="en">Keys are edited only on the extension's own settings page, never inside the website you test, so that website cannot read them. In the console and in exported traces, keys are masked.</span><span data-l="es">Las keys se editan solo en la página de ajustes de la extensión, nunca dentro de la web que pruebas, así esa web no puede leerlas. En la consola y en las trazas exportadas, las keys van enmascaradas.</span></p>
+
+  <h2><span data-l="en">What is sent, and to whom</span><span data-l="es">Qué se envía y a quién</span></h2>
+  <p><span data-l="en">When you send a message, the extension sends to <strong>the provider you chose</strong> (Google Gemini, Anthropic, Groq, OpenRouter, your LM Studio, or the OpenAI-compatible server you entered): your messages, the conversation so far, the names and descriptions of the page's WebMCP tools, the results of those tools, the page title and URL, and your key. The request goes directly from your browser to that provider. That provider's privacy policy and data terms apply; on some free plans it may use the data to improve its products. Use test data.</span><span data-l="es">Cuando envías un mensaje, la extensión envía al <strong>proveedor que elegiste</strong> (Google Gemini, Anthropic, Groq, OpenRouter, tu LM Studio o el servidor compatible con OpenAI que indicaste): tus mensajes, la conversación hasta ese momento, los nombres y descripciones de las tools WebMCP de la página, los resultados de esas tools, el título y la URL de la página, y tu key. La solicitud va directo de tu navegador a ese proveedor. Aplican la política de privacidad y las condiciones de ese proveedor; en algunos planes gratuitos puede usar los datos para mejorar sus productos. Usa datos de prueba.</span></p>
+  <p><span data-l="en">Nothing is sent anywhere else: no analytics, no tracking, no ads. We do not sell or transfer data, and we do not use it for anything unrelated to the extension's single purpose: testing a site's WebMCP tools through a chat.</span><span data-l="es">No se envía nada a ningún otro lugar: sin analítica, sin rastreo, sin publicidad. No vendemos ni transferimos datos, ni los usamos para nada ajeno al único propósito de la extensión: probar las tools WebMCP de una web mediante un chat.</span></p>
+  <p><span data-l="en">The use of information received by this extension adheres to the <a href="https://developer.chrome.com/docs/webstore/program-policies/user-data-faq">Chrome Web Store User Data Policy</a>, including the Limited Use requirements.</span><span data-l="es">El uso de la información que recibe esta extensión cumple la <a href="https://developer.chrome.com/docs/webstore/program-policies/user-data-faq">Política de datos de usuario de Chrome Web Store</a>, incluidos los requisitos de uso limitado.</span></p>
+
+  <h2><span data-l="en">Permissions</span><span data-l="es">Permisos</span></h2>
+  <div class="table">
+    <table>
+      <thead><tr><th><span data-l="en">Permission</span><span data-l="es">Permiso</span></th><th><span data-l="en">Why</span><span data-l="es">Para qué</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>storage</code></td><td><span data-l="en">Save your settings, keys and each tab's conversation.</span><span data-l="es">Guardar tus ajustes, keys y la conversación de cada pestaña.</span></td></tr>
+        <tr><td><code>scripting</code></td><td><span data-l="en">Add the chat only to the sites you enable (and <code>localhost</code>).</span><span data-l="es">Agregar el chat solo a los sitios que activas (y a <code>localhost</code>).</span></td></tr>
+        <tr><td><code>activeTab</code></td><td><span data-l="en">Know which site you are on when you click the toolbar icon, to offer "Enable on this site".</span><span data-l="es">Saber en qué sitio estás al pulsar el ícono, para ofrecer "Activar en este sitio".</span></td></tr>
+        <tr><td><span data-l="en">Provider hosts and <code>localhost</code></span><span data-l="es">Hosts de los proveedores y <code>localhost</code></span></td><td><span data-l="en">Send requests to the AI provider you chose; test sites running on your computer.</span><span data-l="es">Enviar solicitudes al proveedor de IA elegido; probar webs que corren en tu computadora.</span></td></tr>
+        <tr><td><span data-l="en">Optional: a specific site</span><span data-l="es">Opcional: un sitio concreto</span></td><td><span data-l="en">Requested only when you enable that site or set a self-hosted model server. You can remove it in Settings or in <code>chrome://extensions</code>.</span><span data-l="es">Se pide solo cuando activas ese sitio o configuras un servidor de modelos propio. Puedes quitarlo en ajustes o en <code>chrome://extensions</code>.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span data-l="en">Your control</span><span data-l="es">Tu control</span></h2>
+  <p><span data-l="en">Clear a conversation with ↺ in the chat. Delete a key by emptying its field in Settings and saving. Remove the extension to delete everything it stored.</span><span data-l="es">Borra una conversación con ↺ en el chat. Elimina una key vaciando su campo en ajustes y guardando. Quita la extensión para borrar todo lo que guardó.</span></p>
+
+  <h2><span data-l="en">Changes and contact</span><span data-l="es">Cambios y contacto</span></h2>
+  <p><span data-l="en">Changes to this policy are published on this page and in the <a href="https://github.com/yahyrparedes/webmcp-flow/commits/main/docs/privacy.html">repository history</a>. Questions: open an <a href="https://github.com/yahyrparedes/webmcp-flow/issues">issue on GitHub</a>.</span><span data-l="es">Los cambios a esta política se publican en esta página y en el <a href="https://github.com/yahyrparedes/webmcp-flow/commits/main/docs/privacy.html">historial del repositorio</a>. Preguntas: abre un <a href="https://github.com/yahyrparedes/webmcp-flow/issues">issue en GitHub</a>.</span></p>
+</main>
+<script>
+  (function () {
+    var root = document.documentElement;
+    function set(l) {
+      root.dataset.lang = l; root.lang = l;
+      document.querySelectorAll('[data-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.set === l)); });
+      try { localStorage.setItem('wmf-lang', l); } catch (e) { /* sin almacenamiento */ }
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('wmf-lang'); } catch (e) { /* sin almacenamiento */ }
+    set(saved || (/^es\b/i.test(navigator.language || '') ? 'es' : 'en'));
+    document.querySelectorAll('[data-set]').forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.set); }); });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Café Juanito · demo WebMCP</title>
+  <meta name="description" content="Tienda de ejemplo con tools WebMCP para probar WebMCP Flow.">
+  <style>
+    :root { --bg: #f7f3ee; --card: #fffdf9; --ink: #2a2118; --muted: #7a6a5a; --line: #e7ddd0; --accent: #1f6f50; --accent-ink: #fff; --warn: #a15c07; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #17130f; --card: #211b15; --ink: #f1e9df; --muted: #b3a291; --line: #3a3027; --accent: #3fa57a; --accent-ink: #0d1a14; --warn: #e5a54b; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--card); position: sticky; top: 0; }
+    header a { color: inherit; text-decoration: none; font-weight: 700; }
+    .cart { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+    main { max-width: 920px; margin: 0 auto; padding: 24px 20px 120px; }
+    .note { background: var(--card); border: 1px dashed var(--warn); color: var(--warn); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; font-size: 14px; }
+    .hero h1 { font-size: 32px; margin: 8px 0 4px; } .hero p { color: var(--muted); margin: 0 0 20px; max-width: 60ch; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .card { display: flex; flex-direction: column; gap: 2px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: inherit; text-decoration: none; }
+    .card:hover { border-color: var(--accent); } .card small { color: var(--muted); }
+    .art { font-size: 36px; }
+    .back { color: var(--muted); text-decoration: none; }
+    .detail { display: grid; grid-template-columns: 120px 1fr; gap: 20px; margin-top: 12px; }
+    .detail .art { font-size: 80px; text-align: center; }
+    .cat { color: var(--muted); margin: 0; } h1 { margin: 4px 0 8px; }
+    .group h3 { font-size: 14px; margin: 14px 0 6px; } .group small { color: var(--muted); font-weight: 400; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    button { font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 6px 12px; }
+    .chips .on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .primary { background: var(--accent); color: var(--accent-ink); border: 0; font-weight: 600; padding: 10px 18px; margin-top: 12px; }
+    .missing { color: var(--warn); font-size: 14px; min-height: 1em; }
+    .lines { list-style: none; padding: 0; } .lines li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .lines small { display: block; color: var(--muted); }
+    .confirm { border: 2px solid var(--accent); border-radius: 14px; padding: 14px 16px; background: var(--card); margin-bottom: 16px; }
+    .confirm .tag { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); font-weight: 700; }
+    .confirm .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; } .confirm .row .primary { margin: 0; }
+    .small { color: var(--muted); font-size: 13px; margin-bottom: 0; }
+    .done { text-align: center; padding: 40px 0; }
+    #flash { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: var(--accent-ink); padding: 10px 16px; border-radius: 999px; font-weight: 600; }
+    [hidden] { display: none !important; }
+    @media (max-width: 560px) { .detail { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="#/">☕ Café Juanito</a>
+    <a class="cart" href="#/cart">Carrito · <span id="cartCount">0</span></a>
+  </header>
+  <main>
+    <p class="note" id="nowebmcp" hidden>Esta página registra tools WebMCP. Para verlas, instala <a href="../">WebMCP Flow</a> y actívala en este sitio, o usa Chrome con WebMCP activado.</p>
+    <div id="view"></div>
+  </main>
+  <div id="flash" hidden></div>
+  <script src="shop.js"></script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+{
+ "extDescription": {
+  "message": "Test your site's WebMCP tools with a chat that uses them like an agent (Gemini, Claude, Groq, LM Studio…) plus a debug console."
+ },
+ "fabOpen": {
+  "message": "Open WebMCP Flow"
+ },
+ "fabClose": {
+  "message": "Close WebMCP Flow"
+ },
+ "consoleLabel": {
+  "message": "WebMCP Flow console"
+ },
+ "consoleTitle": {
+  "message": "Console"
+ },
+ "filterAll": {
+  "message": "All"
+ },
+ "filterLlm": {
+  "message": "Model"
+ },
+ "filterTools": {
+  "message": "Tools"
+ },
+ "clear": {
+  "message": "Clear"
+ },
+ "closeConsole": {
+  "message": "Close console"
+ },
+ "consoleFooter": {
+  "message": "Read only · does not change the flow"
+ },
+ "seeChat": {
+  "message": "Show chat"
+ },
+ "chatLabel": {
+  "message": "WebMCP Flow chat"
+ },
+ "debugConsole": {
+  "message": "Debug console"
+ },
+ "settings": {
+  "message": "Settings"
+ },
+ "newChat": {
+  "message": "New conversation"
+ },
+ "close": {
+  "message": "Close"
+ },
+ "placeholder": {
+  "message": "Type what you want to do on this site…"
+ },
+ "messageLabel": {
+  "message": "Message"
+ },
+ "send": {
+  "message": "Send"
+ },
+ "stop": {
+  "message": "Stop"
+ },
+ "waitingInPage": {
+  "message": "$1 · answer on the page"
+ },
+ "toolsOne": {
+  "message": "1 tool"
+ },
+ "toolsMany": {
+  "message": "$1 tools"
+ },
+ "modeShim": {
+  "message": "compatibility mode"
+ },
+ "modeNative": {
+  "message": "native WebMCP"
+ },
+ "noToolsTitle": {
+  "message": "This page registered no WebMCP tools"
+ },
+ "setupTitle": {
+  "message": "Set up your assistant"
+ },
+ "setupText": {
+  "message": "Missing: $1. Choose the name, style and model provider. Your key is stored only in your browser."
+ },
+ "openSettings": {
+  "message": "Open settings"
+ },
+ "hello": {
+  "message": "Hi, I'm $1. I test this site through its WebMCP tools, the way an agent would."
+ },
+ "toolsFound": {
+  "message": "Tools found:"
+ },
+ "noToolsYet": {
+  "message": "No WebMCP tools detected on this page yet."
+ },
+ "exWhatQ": {
+  "message": "What can I do on this site?"
+ },
+ "exWhatBtn": {
+  "message": "What can I do here?"
+ },
+ "exFlowQ": {
+  "message": "Test this site's main flow step by step and tell me what worked and what didn't."
+ },
+ "exFlowBtn": {
+  "message": "Test the main flow"
+ },
+ "running": {
+  "message": "running… (if the page asks you something, answer it there)"
+ },
+ "preparing": {
+  "message": "Preparing $1…"
+ },
+ "thinking": {
+  "message": "Thinking…"
+ },
+ "working": {
+  "message": "$1 is working… (■ to stop)"
+ },
+ "consoleEmpty": {
+  "message": "Every call to the model and to the tools shows up here: what was sent, what came back and how long it took."
+ },
+ "toText": {
+  "message": "text"
+ },
+ "missingConfig": {
+  "message": "Not configured yet: $1. Open the settings (⚙)."
+ },
+ "missingUrl": {
+  "message": "server URL"
+ },
+ "missingKey": {
+  "message": "API key"
+ },
+ "missingModel": {
+  "message": "model"
+ },
+ "loadedModel": {
+  "message": "(loaded model)"
+ },
+ "stoppedSteps": {
+  "message": "I stopped after $1 steps to avoid a loop. Tell me how to continue."
+ },
+ "stopped": {
+  "message": "Stopped."
+ },
+ "stoppedByUser": {
+  "message": "Stopped by the user."
+ },
+ "emptyReply": {
+  "message": "The model finished without replying. Try again or check the console (>_)."
+ },
+ "pageNoResponse": {
+  "message": "The page didn't respond (was it closed, or is it still loading?)."
+ },
+ "toolTimeout": {
+  "message": "The tool took too long to respond."
+ },
+ "noBridge": {
+  "message": "I can't read this page's tools. Reload it (⌘R / Ctrl+R) and try again: if the extension was installed or updated while the page was open, the page needs a reload."
+ },
+ "noToolsHead": {
+  "message": "**I found no WebMCP tools on this page**, so I can't act on it."
+ },
+ "noToolsCheck": {
+  "message": "What to check:"
+ },
+ "noToolsNative": {
+  "message": "Chrome has WebMCP enabled, but the page didn't register any tools (or hasn't finished loading)."
+ },
+ "noToolsShim": {
+  "message": "The page didn't call `document.modelContext.registerTool()` or `navigator.modelContext.registerTool()`."
+ },
+ "noToolsScreen": {
+  "message": "If the page registers tools per screen, go to the screen where they exist and write again."
+ },
+ "noToolsReload": {
+  "message": "If you installed or updated the extension while the page was open, reload it."
+ },
+ "noToolsFlag": {
+  "message": "If the page only registers tools when it detects native WebMCP, enable `chrome://flags/#enable-webmcp-testing`."
+ },
+ "noToolsLog": {
+  "message": "The page exposes no WebMCP tools: the model wasn't called."
+ },
+ "lmstudioDown": {
+  "message": "I couldn't reach LM Studio at $1. Is the server running with a model loaded?"
+ },
+ "cantConnect": {
+  "message": "I couldn't reach $1 ($2): $3"
+ },
+ "httpError": {
+  "message": "$1 returned $2."
+ },
+ "badKey": {
+  "message": "The key is invalid or lacks permission. "
+ },
+ "rateLimit": {
+  "message": "Your plan's usage limit was reached. "
+ },
+ "checkUrlModel": {
+  "message": "Check the URL and the model name. "
+ },
+ "customLabel": {
+  "message": "OpenAI-compatible"
+ },
+ "optTagline": {
+  "message": "Test your site's WebMCP tools end to end."
+ },
+ "optAssistant": {
+  "message": "Your assistant"
+ },
+ "optName": {
+  "message": "Name"
+ },
+ "optStyle": {
+  "message": "Style"
+ },
+ "optStylePh": {
+  "message": "E.g. Friendly and brief. Talks like a helpful car salesperson."
+ },
+ "optStyleHelp": {
+  "message": "How it talks and behaves. Added to the model's instructions."
+ },
+ "optPosition": {
+  "message": "Chat position"
+ },
+ "optLeft": {
+  "message": "Bottom left"
+ },
+ "optRight": {
+  "message": "Bottom right"
+ },
+ "optModel": {
+  "message": "Model"
+ },
+ "optProvider": {
+  "message": "Provider"
+ },
+ "provGemini": {
+  "message": "Google AI Studio key"
+ },
+ "provAnthropic": {
+  "message": "Anthropic key"
+ },
+ "provGroq": {
+  "message": "Open models, very fast"
+ },
+ "provOpenrouter": {
+  "message": "One key, hundreds of models"
+ },
+ "provLmstudio": {
+  "message": "Local model, no key"
+ },
+ "provOther": {
+  "message": "Other"
+ },
+ "provCustom": {
+  "message": "OpenAI-compatible"
+ },
+ "optKeyOf": {
+  "message": "API key for"
+ },
+ "optKeyOwn": {
+  "message": "your server (optional)"
+ },
+ "optKeyWhere": {
+  "message": "Get it at $1."
+ },
+ "optKeyHelp": {
+  "message": "Stored only in this browser (chrome.storage.local), one per provider, and sent only to that provider. Check its data-use terms."
+ },
+ "optUrl": {
+  "message": "Server URL"
+ },
+ "optTemperature": {
+  "message": "Temperature"
+ },
+ "optTest": {
+  "message": "Test connection"
+ },
+ "optSites": {
+  "message": "Active sites"
+ },
+ "optSitesLead": {
+  "message": "WebMCP Flow only runs on these sites. To add one, open it and click the extension icon → \"Enable on this site\"."
+ },
+ "optAlways": {
+  "message": "always"
+ },
+ "optRemove": {
+  "message": "Remove"
+ },
+ "optSave": {
+  "message": "Save"
+ },
+ "optSaved": {
+  "message": "Saved ✓"
+ },
+ "optSavedNoPerm": {
+  "message": "Saved, but without permission for that server: the chat won't be able to connect."
+ },
+ "optTesting": {
+  "message": "Testing…"
+ },
+ "optNoPerm": {
+  "message": "No permission to connect to that server."
+ },
+ "optConnected": {
+  "message": "Connected ✓ ($1 models)"
+ },
+ "optConnectFail": {
+  "message": "Couldn't connect: $1"
+ },
+ "optNoAnswer": {
+  "message": "no answer"
+ },
+ "optPermNotice": {
+  "message": "When you save, Chrome will ask permission to connect to $1."
+ },
+ "helpUrlGemini": {
+  "message": "Google's OpenAI-compatible endpoint."
+ },
+ "helpModelGemini": {
+  "message": "\"Test connection\" lists the available models."
+ },
+ "helpUrlAnthropic": {
+  "message": "Claude API (Messages)."
+ },
+ "helpModelAnthropic": {
+  "message": "E.g. claude-sonnet-5-5, claude-opus-5-5 or claude-haiku-4-5-20251001."
+ },
+ "helpUrlGroq": {
+  "message": "Groq's OpenAI-compatible endpoint."
+ },
+ "helpModelGroq": {
+  "message": "Use a model with tool use, e.g. openai/gpt-oss-120b."
+ },
+ "helpUrlOpenrouter": {
+  "message": "OpenRouter's OpenAI-compatible endpoint."
+ },
+ "helpModelOpenrouter": {
+  "message": "provider/model format, e.g. openai/gpt-oss-120b or anthropic/…"
+ },
+ "helpUrlLmstudio": {
+  "message": "LM Studio → Developer → Start server. Default http://localhost:1234/v1. If LM Studio runs on this computer, use localhost so Chrome asks for no permission."
+ },
+ "helpModelLmstudio": {
+  "message": "Empty = the model loaded in LM Studio."
+ },
+ "helpUrlCustom": {
+  "message": "Any OpenAI-compatible server (Mistral, DeepSeek, xAI, Together, Ollama, vLLM…), ending in /v1."
+ },
+ "helpModelCustom": {
+  "message": "Required: the model name on that server."
+ },
+ "phModelLoaded": {
+  "message": "(model loaded in LM Studio)"
+ },
+ "phModelName": {
+  "message": "model-name"
+ },
+ "popActive": {
+  "message": "Active on this site"
+ },
+ "popOpenChat": {
+  "message": "Open chat"
+ },
+ "popDisable": {
+  "message": "Disable on this site"
+ },
+ "popInactive": {
+  "message": "Not active on this site."
+ },
+ "popEnable": {
+  "message": "Enable on this site"
+ },
+ "popEnableHint": {
+  "message": "Chrome will ask permission for this domain only. The page will reload so its tools are detected."
+ },
+ "popUnsupported": {
+  "message": "WebMCP Flow only works on http or https pages."
+ },
+ "popReload": {
+  "message": "Reload the page to open the chat."
+ },
+ "popDenied": {
+  "message": "No permission: WebMCP Flow stays off on this site."
+ },
+ "exportTrace": {
+  "message": "Export trace (JSON)"
+ }
+}

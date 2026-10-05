@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>WebMCP Flow</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../icons/icon48.png" alt="" width="28" height="28">
+    <strong>WebMCP Flow</strong>
+  </header>
+  <p id="site" class="site"></p>
+  <section id="on" hidden>
+    <p class="state ok" id="onText" data-i18n="popActive"></p>
+    <button id="open" class="primary" data-i18n="popOpenChat"></button>
+    <button id="off" class="link" data-i18n="popDisable"></button>
+  </section>
+  <section id="offState" hidden>
+    <p class="state" id="offText" data-i18n="popInactive"></p>
+    <button id="enable" class="primary" data-i18n="popEnable"></button>
+    <p class="hint" id="enableHint" data-i18n="popEnableHint"></p>
+  </section>
+  <section id="unsupported" hidden>
+    <p class="state" id="unsupportedText" data-i18n="popUnsupported"></p>
+  </section>
+  <footer><a href="#" id="options" data-i18n="settings"></a></footer>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

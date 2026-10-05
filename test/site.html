@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Autos Juanito</title>
+<style>body{font-family:system-ui;margin:40px} .car{padding:8px;border:1px solid #ddd;margin:6px 0;border-radius:8px}</style></head>
+<body>
+<h1>Autos Juanito</h1>
+<div id="view">Inicio</div>
+<div id="favs">Favoritos: 0</div>
+<script>
+const cars = [{id:1,name:'Sedán Aurora',price:21000},{id:2,name:'SUV Montaña',price:32000},{id:3,name:'Sedán Brisa',price:18500}];
+const favs = [];
+const mc = document.modelContext || navigator.modelContext;
+let detailCtrl = null;
+function show(id){
+  const c = cars.find(x=>x.id===id);
+  document.getElementById('view').innerHTML = `<div class="car">Detalle: ${c.name} · $${c.price}</div>`;
+  detailCtrl?.abort(); detailCtrl = new AbortController();
+  mc.registerTool({ name:'add_current_car_to_favorites', description:'Agrega a favoritos el auto que se está viendo.',
+    inputSchema:{type:'object',properties:{}, additionalProperties:false},
+    execute: async () => { favs.push(c.id); document.getElementById('favs').textContent='Favoritos: '+favs.length; return {ok:true, favoritos: favs.length, auto:c.name}; } },
+    { signal: detailCtrl.signal });
+}
+if (mc) {
+  mc.registerTool({ name:'search_cars', description:'Busca autos por texto. Devuelve id, nombre y precio.',
+    inputSchema:{$schema:'http://json-schema.org/draft-07/schema#', type:'object', properties:{query:{type:'string',description:'texto'}}, required:['query']},
+    execute: async ({query}) => cars.filter(c=>c.name.toLowerCase().includes(String(query).toLowerCase())) });
+  mc.registerTool({ name:'open_car', description:'Abre la ficha de un auto por id.',
+    inputSchema:{type:'object', properties:{id:{type:'number'}}, required:['id']},
+    execute: async ({id}) => { if(!cars.find(c=>c.id===id)) return {error:'No existe ese id'}; show(id); return {ok:true}; } });
+}
+</script>
+</body></html>

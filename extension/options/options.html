@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebMCP Flow</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <header>
+      <img src="../icons/icon48.png" alt="" width="40" height="40">
+      <div>
+        <h1>WebMCP Flow</h1>
+        <p data-i18n="optTagline"></p>
+      </div>
+    </header>
+
+    <form id="form">
+      <section>
+        <h2 data-i18n="optAssistant"></h2>
+        <label><span data-i18n="optName"></span>
+          <input name="assistantName" maxlength="40" placeholder="Flow" required>
+        </label>
+        <label><span data-i18n="optStyle"></span>
+          <textarea name="style" rows="3" maxlength="600" data-i18n-placeholder="optStylePh"></textarea>
+          <small data-i18n="optStyleHelp"></small>
+        </label>
+        <label><span data-i18n="optPosition"></span>
+          <select name="position">
+            <option value="left" data-i18n="optLeft"></option>
+            <option value="right" data-i18n="optRight"></option>
+          </select>
+        </label>
+      </section>
+
+      <section>
+        <h2 data-i18n="optModel"></h2>
+        <div class="providers" role="radiogroup" data-i18n-aria="optProvider">
+          <label class="prov"><input type="radio" name="provider" value="gemini"> <span><strong>Gemini</strong><small data-i18n="provGemini"></small></span></label>
+          <label class="prov"><input type="radio" name="provider" value="anthropic"> <span><strong>Claude</strong><small data-i18n="provAnthropic"></small></span></label>
+          <label class="prov"><input type="radio" name="provider" value="groq"> <span><strong>Groq</strong><small data-i18n="provGroq"></small></span></label>
+          <label class="prov"><input type="radio" name="provider" value="openrouter"> <span><strong>OpenRouter</strong><small data-i18n="provOpenrouter"></small></span></label>
+          <label class="prov"><input type="radio" name="provider" value="lmstudio"> <span><strong>LM Studio</strong><small data-i18n="provLmstudio"></small></span></label>
+          <label class="prov"><input type="radio" name="provider" value="custom"> <span><strong data-i18n="provOther"></strong><small data-i18n="provCustom"></small></span></label>
+        </div>
+        <label data-key><span data-i18n="optKeyOf"></span> <span id="keyName">Gemini</span>
+          <input name="apiKey" type="password" autocomplete="off" spellcheck="false">
+          <small><span id="keyWhere"></span> <span data-i18n="optKeyHelp"></span></small>
+        </label>
+        <label><span data-i18n="optModel"></span>
+          <input name="model" list="models" spellcheck="false">
+          <datalist id="models"></datalist>
+          <small id="modelHint"></small>
+        </label>
+        <label><span data-i18n="optUrl"></span>
+          <input name="baseUrl" spellcheck="false">
+          <small id="urlHint"></small>
+          <small id="permNotice" class="warn" hidden></small>
+        </label>
+        <label><span data-i18n="optTemperature"></span>
+          <input name="temperature" type="number" min="0" max="1.5" step="0.1">
+        </label>
+        <div class="row">
+          <button type="button" id="test" data-i18n="optTest"></button>
+          <span id="testResult" class="note"></span>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-i18n="optSites"></h2>
+        <p class="lead" data-i18n="optSitesLead"></p>
+        <ul id="sites" class="sites"></ul>
+      </section>
+
+      <footer>
+        <button type="submit" class="primary" data-i18n="optSave"></button>
+        <span id="saved" class="note"></span>
+      </footer>
+    </form>
+  </main>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

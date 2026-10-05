@@ -1,0 +1,7 @@
+node_modules/
+dist/
+test/*.png
+test-results/
+.DS_Store
+docs/assets/demo-frames/
+.idea/
