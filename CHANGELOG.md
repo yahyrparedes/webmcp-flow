@@ -10,6 +10,8 @@ All notable changes to WebMCP Flow. Versions follow [Semantic Versioning](https:
 - Issue and pull request templates.
 ### Changed
 - Extension files moved to `extension/` (load that folder in Developer mode).
+- New icon (brand direction "Rayo") and Chrome Web Store assets in `docs/store/`.
+- Default language is now English (`default_locale: en`); Spanish is used when Chrome is in Spanish.
 
 ## [0.3.0] - 2026-10-05
 ### Changed
